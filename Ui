@@ -1,1 +1,122 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./index.css";
 
+const currentUser = {
+  name: "Rajpal Nehra",
+  email: "ch.rajpalnehra001@gmail.com",
+  role: "superadmin",
+  bio: "Super admin of The People's Tech Community",
+  score: 4400,
+  medals: 4,
+  followers: 397,
+  following: 0,
+  likes: 14870,
+  coins: 115306,
+};
+
+const tasks = [
+  { id: 1, title: "Create a tech meme", reward: "100 pts + medal" },
+  { id: 2, title: "Write your Python guide", reward: "200 pts + medal" },
+];
+
+const getBadge = (role) => {
+  switch (role) {
+    case "team":
+      return "⭐";
+    case "admin":
+      return "⭐⭐";
+    case "superadmin":
+      return "⭐⭐⭐";
+    default:
+      return "";
+  }
+};
+
+function Home() {
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-2">The People's Tech Community</h1>
+      <p>Welcome, {currentUser.email}</p>
+      <p>{getBadge(currentUser.role)} {currentUser.role}</p>
+
+      {(currentUser.role === "admin" || currentUser.role === "superadmin") && (
+        <div className="mt-4">
+          <h2 className="font-semibold">Admin Panel</h2>
+          <ul className="list-disc pl-5">
+            <li>📌 Pin/unpin posts</li>
+            <li>🗑️ Delete posts</li>
+            <li>📝 Assign tasks</li>
+          </ul>
+        </div>
+      )}
+
+      {currentUser.role === "superadmin" && (
+        <div className="mt-4">
+          <h2 className="font-semibold">Super Admin Controls</h2>
+          <ul className="list-disc pl-5">
+            <li>⬆ Promote/Demote Admins</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Profile() {
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold">{currentUser.name}</h1>
+      <p>{getBadge(currentUser.role)} {currentUser.role}</p>
+      <p>{currentUser.email}</p>
+      <p>{currentUser.bio}</p>
+      <div className="mt-4 space-y-1">
+        <p>🎖️ Medals: {currentUser.medals}</p>
+        <p>📈 Score: {currentUser.score}</p>
+        <p>👥 Followers: {currentUser.followers}</p>
+        <p>➡️ Following: {currentUser.following}</p>
+        <p>❤️ Likes: {currentUser.likes}</p>
+        <p>🪙 Coins: {currentUser.coins}</p>
+      </div>
+    </div>
+  );
+}
+
+function Tasks() {
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-2">Community Tasks</h1>
+      {tasks.map(task => (
+        <div key={task.id} className="mb-4 border p-3 rounded">
+          <h2 className="font-semibold">{task.title}</h2>
+          <p>Reward: {task.reward}</p>
+          <button
+            className="mt-2 px-3 py-1 bg-blue-500 text-white rounded"
+            onClick={() => alert("Task submitted for review!")}
+          >
+            ✅ Mark as Complete
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="p-4 space-x-4 bg-gray-100">
+        <Link to="/" className="text-blue-600">🏠 Home</Link>
+        <Link to="/profile" className="text-blue-600">👤 Profile</Link>
+        <Link to="/tasks" className="text-blue-600">📋 Tasks</Link>
+      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/tasks" element={<Tasks />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
